@@ -1,0 +1,13 @@
+%h2 Wait!
+
+%p
+  This order hasn't been completed.
+  Please contact
+  %a{ :href => "mailto:#{Sellbot::Config.support}" }= Sellbot::Config.support
+  if you believe this to be a mistake.
+
+%p
+  %em P.S.
+  Please tell us this Order ID when you contact us:
+  %br
+  %strong.larger= params[:uuid]

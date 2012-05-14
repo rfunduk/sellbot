@@ -1,0 +1,9 @@
+.step.step2
+  %h2 Thank you!
+
+  %p.permalink
+    Permalink:
+    %strong.larger
+      %a{ :href => url(:order, :show, @order[:id]) }= @order[:id]
+
+  = partial 'order/products_table'

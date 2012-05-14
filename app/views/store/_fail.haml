@@ -1,0 +1,13 @@
+.step.step2
+  %h2 Oops :(
+
+  %p
+    There was a problem confirming your
+    purchase. Please contact
+    %a{ :href => "mailto:#{Sellbot::Config.support}" } support
+    ASAP and we'll work it out for you all immediate-like.
+
+  %p
+    Your Order ID:
+    %br
+    %strong.larger= @order[:id]

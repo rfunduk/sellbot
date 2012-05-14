@@ -1,0 +1,19 @@
+!!! 5
+%html
+  %head
+    %title= Sellbot::Config.title
+    %link{ :href => '/css/sellbot.css', :media => :screen, :rel => :stylesheet, :type => "text/css" }
+  %body
+    .content.clearfix.span6
+      - if Sellbot::Config.logo
+        .logo.span6
+          %a{ :href => Sellbot::Config.home }
+            %img{ :src => Sellbot::Config.logo }
+      .box.span6
+        = yield
+      .ref.span6
+        Powered by
+        %a{ :href => 'http://rfunduk.github.com/sellbot' } sellbot
+
+    %script{ :type => 'text/javascript', :src => '/js/applib.js' }
+    = yield_content :scripts

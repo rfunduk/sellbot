@@ -1,0 +1,58 @@
+products:
+  screencast1:
+    name: "A Screencast"
+    subtitle: "A short description!"
+    price: 9
+    files:
+      high: screencast1-high.mov
+      low: screencast1-low.mov
+      code: screencast1-code.zip
+  screencast2:
+    name: "Another Screencast"
+    subtitle: "It's the best screencast ever."
+    price: 9
+    files:
+      high: screencast2-high.mov
+      low: screencast2-low.mov
+  screencast3:
+    name: "Yet Another Screencast"
+    subtitle: "Mmm, screencasty."
+    price: 9
+    files:
+      download: early-br-walkthrough.mov
+  killer_ebook:
+    name: "My Killer E-Book"
+    price: 19
+    files:
+      kindle: killer.mobi
+      epub: killer.epub
+      pdf: killer.pdf
+  mediocre_ebook:
+    name: "My Just-Alright E-Book"
+    price: 4
+    files:
+      pdf: mediocre.pdf
+  hug_voucher:
+    name: "A Digital Voucher for 1 Hug"
+    price: 100
+    files:
+      download: hug_voucher.pdf
+
+packages:
+  everything:
+    name: "Friggen Everything"
+    price: 111
+    contents: "*"
+  awesome_pack:
+    name: "Awesome Pack"
+    price: 20
+    contents:
+      - screencast1
+      - screencast2
+      - screencast3
+  book_pack:
+    name: "All My Books"
+    price: 22
+    contents:
+      - mediocre_ebook
+      - killer_ebook

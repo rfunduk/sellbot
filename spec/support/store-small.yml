@@ -1,0 +1,21 @@
+products:
+  product1:
+    name: "A Product"
+    subtitle: "A short description!"
+    price: 9
+    files:
+      download: somefile.mov
+  product2:
+    name: "Another Product"
+    subtitle: "A short description!"
+    price: 9
+    files:
+      download: otherfile.mov
+
+packages:
+  apackage:
+    name: "A Package"
+    price: 20
+    contents:
+      - product1
+      - product2

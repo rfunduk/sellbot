@@ -1,0 +1,75 @@
+.step.step2
+  %h2 Ok, all ready &raquo;
+  %p
+    Your Order ID:
+    %strong= @order[:id]
+
+%form#stripe_form.form-horizontal{ :method => :post }
+  %fieldset
+    .control-group
+      %label.control-label Card Number
+      .controls
+        %input.card_number.span3{ :type => :text, :value => Padrino.env == :development ? '4242424242424242' : '' }
+    .control-group
+      %label.control-label CVV
+      .controls
+        %input.card_cvv.span1{ :type => :text, :autocomplete => :off, :value => Padrino.env == :development ? '111' : '' }
+    .control-group
+      %label.control-label Expiration
+      .expiry.controls
+        %input.card_expire_mm.span1{ :type => :text, :autocomplete => :off, :value => Padrino.env == :development ? '1' : '' }
+        %input.card_expire_yyyy.span1{ :type => :text, :autocomplete => :off, :value => Padrino.env == :development ? '2020' : '' }
+        %span.help-inline (MM/YYYY)
+    .errors.control-group{ :style => 'display: none;' }
+      %label.control-label
+      .controls
+        %span
+    .control-group
+      %label.control-label &nbsp;
+      .controls
+        %button.submit.btn.btn-primary{ :type => :submit } Secure Checkout
+
+:javascript
+  var form = $('#stripe_form');
+
+  $.ajax( {
+    type: 'get',
+    dataType: 'script',
+    url: 'https://js.stripe.com/v1/',
+    success: function() {
+      Stripe.setPublishableKey('#{@payment.config.publishable}');
+      form.submit( function( e ) {
+        e.preventDefault();
+        form.find('.submit-button')
+          .attr( 'disabled', 'disabled' )
+          .text( "Please wait..." );
+
+        Stripe.createToken(
+          {
+            number: form.find('.card_number').val(),
+            cvc: form.find('.card_cvv').val(),
+            exp_month: form.find('.card_expire_mm').val(),
+            exp_year: form.find('.card_expire_yyyy').val()
+          },
+          function( status, response ) {
+            if( response.error ) {
+              // show the errors on the form
+              form.find('.errors')
+                .show()
+                .find('.controls span')
+                .text( response.error.message + '.' ).show();
+              form.find('.submit-button')
+                .attr( 'disabled', null )
+                .text( 'Secure Checkout' );
+            }
+            else {
+              window.location = "#{@complete_url}?tx="+response['id'];
+            }
+            return false;
+          }
+        );
+        return false;
+      } );
+      $(document).trigger( 'paymentWidgetLoaded' );
+    }
+  } );

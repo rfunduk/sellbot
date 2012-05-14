@@ -1,0 +1,5 @@
+packages:
+  apackage:
+    name: "A Package"
+    price: 20
+    contents: '*'

@@ -1,0 +1,23 @@
+common: &common
+  title: "Sellbot Test"
+  file_key_map:
+    download: "Download"
+  support: "support@example.com"
+
+test:
+  <<: *common
+  home: 'http://example.dev'
+  host: 'http://purchase.example.dev'
+  logo: "/img/logo.png"
+  session: "test"
+  payment:
+    processor: Free
+  db:
+    adapter: Redis
+    config:
+      uri: http://localhost:6379
+      namespace: sellbot-test
+  storage:
+    provider: Static
+  admin:
+    x: y

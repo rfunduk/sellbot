@@ -1,0 +1,51 @@
+common: &common
+  support: "support@example.com"
+  email_optional: true
+  max_downloads: 5
+  logo: "/img/logo.png"
+  file_key_map:
+    download: "Download"
+    high: "High Quality MP4"
+    low: "Low Quality MP4"
+    code: "Source Code"
+    kindle: ".mobi (for Kindle)"
+    epub: ".epub (for Most eReaders)"
+    pdf: "PDF (ftw)"
+  price:
+    unit: '$'
+    precision: 0
+
+development:
+  <<: *common
+  home: 'http://sellbot.dev'
+  host: 'http://purchase.sellbot.dev'
+  session: "SOMETHING BIG - maybe try `SecureRandom.base64(256)`"
+  db:
+    adapter: Redis
+    config:
+      uri: http://127.0.0.1:6379
+      namespace: a-namespace
+  s3:
+    bucket: a-bucket-name
+    aws:
+      access_key_id: "KEY"
+      secret_access_key: "SECRET"
+  admin:
+    username: password
+production:
+  <<: *common
+  home: 'http://example.com'
+  host: 'http://purchase.example.com'
+  session: "SOMETHING BIG - maybe try `SecureRandom.base64(256)`"
+  db:
+    adapter: Redis
+    config:
+      uri: http://127.0.0.1:6379
+      namespace: a-namespace
+  s3:
+    bucket: production-bucket-name
+    aws:
+      access_key_id: "PRODUCTION KEY"
+      secret_access_key: "PRODUCTION SECRET"
+  admin:
+    username: password

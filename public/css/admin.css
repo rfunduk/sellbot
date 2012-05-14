@@ -1,0 +1,316 @@
+p.dashboard {
+  padding: 0;
+  margin: 0;
+}
+p.dashboard a.btn {
+  display: block;
+}
+
+p.footnote {
+  margin: 15px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-style: italic;
+}
+
+ul#store_tools {
+  padding: 0;
+  margin: 0;
+  height: 33px;
+  list-style: none outside;
+}
+  ul#store_tools lh {
+    line-height: 33px;
+    float: left;
+    margin-right: 15px;
+    font-weight: bold;
+  }
+  ul#store_tools li {
+    margin-top: -3px;
+    line-height: 33px;
+    float: left;
+    margin-right: 10px;
+  }
+
+#results {
+  margin-top: 10px;
+  display: none;
+}
+
+#login_form {
+  text-align: center;
+  height: auto;
+}
+#login_form form {
+  height: auto;
+}
+#login_form input {
+  clear: both;
+  margin: 4px auto;
+}
+#login_form p.error {
+  text-align: center;
+  color: #900;
+  font-weight: bold;
+}
+
+hr {
+  height: 8px;
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+  display: block;
+  clear: both;
+}
+
+ul#switcher {
+  padding: 0;
+  list-style: none outside;
+  height: 30px;
+  margin: 10px 0 20px 0;
+}
+  ul#switcher li {
+    float: left;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    text-align: center;
+    margin-right: 4px;
+  }
+  ul#switcher li.active {
+    background: #DDD;
+  }
+  ul#switcher li:hover {
+    background: #EEE;
+  }
+
+section {
+  display: none;
+}
+  section.active {
+    display: block;
+  }
+
+.controls {
+  width: 250px;
+  font-size: 12px;
+}
+  .controls label {
+    display: block;
+    width: 60px;
+    float: left;
+  }
+  .controls input {
+    width: 180px;
+    margin-left: 10px;
+    float: left;
+  }
+
+table.orders {
+  margin-top: 20px;
+  font-size: 12px;
+  width: 100%;
+}
+  table.orders tr {
+  }
+    table.orders tr td.time,
+    table.orders tr td.order_id,
+    table.orders tr td.email {
+      white-space: nowrap;
+    }
+    table.orders tr td.email.skipped {
+      color: #999;
+    }
+    table.orders tr td.verified {
+    }
+      table.orders tr td.verified.true {
+        color: green;
+      }
+      table.orders tr td.verified.false {
+        color: red;
+      }
+    table.orders tr td.info {
+    }
+      table.orders tr td.info .modal {
+        display: none;
+      }
+
+table.store {
+  font-size: 12px;
+  width: 100%;
+}
+  table.store tr {
+  }
+    table.store tr.active {
+    }
+      table.store tr.active td {
+        background: #DDD;
+      }
+    table.store tr td {
+    }
+    table.store tr td.name {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+      table.store tr td.name a {
+        display: block;
+        font-size: 10px;
+        line-height: 10px;
+        text-decoration: underline;
+      }
+    table.store tr td.download {
+      width: 40%;
+    }
+      table.store tr td.download a {
+        display: block;
+        float: none;
+        margin-bottom: 3px;
+        text-decoration: none;
+        font-size: 12px;
+        padding: 4px 5px;
+        line-height: normal;
+      }
+        table.store tr td.download a small {
+          display: block;
+          font-size: 11px;
+        }
+
+/****** DATE PICKER ******/
+div.datepicker {
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  width: 196px;
+  height: 147px;
+  position: absolute;
+  cursor: default;
+  top: 0;
+  left: 0;
+  display: none;
+}
+.datepickerContainer {
+  background: #e7e7e7;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.datepickerHidden {
+  display: none;
+}
+div.datepicker table {
+  border-collapse:collapse;
+}
+div.datepicker a {
+  color: #434343;
+  text-decoration: none;
+  cursor: default;
+  outline: none;
+}
+div.datepicker table td {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+div.datepicker th {
+  text-align: center;
+  color: #4f4f4f;
+  font-weight: normal;
+}
+div.datepicker tbody th {
+  text-align: left;
+}
+div.datepicker tbody th.datepickerWeek a {
+  color: #727272;
+}
+div.datepicker tbody a {
+  display: block;
+}
+.datepickerDays a {
+  width: 20px;
+  line-height: 16px;
+  height: 16px;
+  padding-right: 2px;
+}
+.datepickerYears a,
+.datepickerMonths a{
+  width: 44px;
+  line-height: 36px;
+  height: 36px;
+  text-align: center;
+}
+td.datepickerNotInMonth a {
+  color: #969696;
+}
+tbody.datepickerDays td.datepickerSelected{
+  background: #7b899c !important;
+}
+tbody.datepickerDays td.datepickerSelected a:hover {
+  background: inherit !important;
+}
+tbody.datepickerDays td.datepickerSelected a {
+  color: white;
+}
+tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
+  background: #a0a0a0 !important;
+}
+tbody.datepickerYears td.datepickerSelected,
+tbody.datepickerMonths td.datepickerSelected{
+  background: #17384d !important;
+}
+div.datepicker a:hover,
+div.datepicker a:hover {
+  background: #d5d5d5;
+  color: #444;
+}
+div.datepicker td.datepickerNotInMonth a:hover {
+  color: #686868;
+}
+div.datepicker tbody th {
+  text-align: left;
+}
+.datepickerSpace div {
+  width: 20px;
+}
+.datepickerGoNext a,
+.datepickerGoPrev a,
+.datepickerMonth a {
+  text-align: center;
+  height: 20px;
+  line-height: 20px;
+}
+.datepickerGoNext a {
+  float: right;
+  width: 20px;
+}
+.datepickerGoPrev a {
+  float: left;
+  width: 20px;
+}
+table.datepickerViewDays tbody.datepickerMonths,
+table.datepickerViewDays tbody.datepickerYears {
+  display: none;
+}
+table.datepickerViewMonths tbody.datepickerDays,
+table.datepickerViewMonths tbody.datepickerYears,
+table.datepickerViewMonths tr.datepickerDoW {
+  display: none;
+}
+table.datepickerViewYears tbody.datepickerDays,
+table.datepickerViewYears tbody.datepickerMonths,
+table.datepickerViewYears tr.datepickerDoW {
+  display: none;
+}
+td.datepickerDisabled a,
+td.datepickerDisabled.datepickerNotInMonth a{
+  color: #a0a0a0;
+}
+td.datepickerDisabled a:hover {
+  color: #a7a7a7;
+}
+td.datepickerSpecial a {
+  background: #700;
+}
+td.datepickerSpecial.datepickerSelected a {
+  background: #a00;
+}

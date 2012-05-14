@@ -1,0 +1,12 @@
+common: &common
+  title: "Sellbot Test Updated"
+  file_key_map:
+    download: "Download"
+
+test:
+  <<: *common
+  db:
+    adapter: Redis
+    config:
+      uri: http://localhost:6379
+      namespace: sellbot-test2

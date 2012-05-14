@@ -1,0 +1,77 @@
+.box.span8
+  %h3 Packages
+  %table.table.store
+    %thead
+      %tr
+        %th Name
+        %th Price
+        %th Sales
+        %th Contents
+    %tbody
+      - Sellbot::Store.packages.each do |package|
+        %tr.package
+          %td.name
+            = package[:name]
+            %a{ href:url(:store, :start, id:package[:id]) } purchase link
+          %td= number_to_currency( package[:price], precision:Sellbot::Config.price[:precision], unit:Sellbot::Config.price[:unit] )
+          %td= @db.all_for_item_id( package[:id] ).count
+          %td
+            %ul
+              - package[:contents].each do |product|
+                %li
+                  %a.inner{ href:"##{product[:id]}" }= product[:name]
+
+%hr
+
+.box.span8
+  %h3 Products
+  %table.table.store
+    %thead
+      %tr
+        %th Name
+        %th Price
+        %th Sales
+        %th Contents
+    %tbody
+      - Sellbot::Store.products.each do |product|
+        %tr.product
+          %td.name
+            %a{ name:product[:id] }
+            = product[:name]
+            %a{ href:url(:store, :start, id: product[:id]) } purchase link
+          %td= number_to_currency( product[:price], precision:Sellbot::Config.price[:precision], unit:Sellbot::Config.price[:unit] )
+          %td= @db.all_for_item_id( product[:id] ).select { |o| o[:verified] }.count
+          %td.download
+            - product[:files].entries.each do |key, filename|
+              %a.btn{ href:@storage.url_for( product[:files][key.to_sym], expires:(Time.now + (60*60*24*365)) ) }
+                = Sellbot::Config.file_key_map[key.to_sym] || key.to_s
+                %small= filename
+
+  %p.footnote
+    %strong Note:
+    Buttons in this table are direct download links (eg, comps)
+    and expire in 1 year for convenience.
+
+
+%hr
+
+.box.span8
+  %ul#store_tools
+    %lh Tools:
+    %li
+      %a.btn{ href:url(:admin, :reload_store) } Reload <code>store.yml</code>
+
+
+
+- content_for :scripts do
+  :javascript
+    $(document).ready( function() {
+      $('table.store a.inner').click( function() {
+        var target = $(this).attr('href');
+        $('table.store tr.product a[name=' + target.slice(1) + ']')
+          .parents('tr')
+          .siblings().removeClass('active').end()
+          .addClass('active');
+        return true;
+      } );
+    } );

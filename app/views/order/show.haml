@@ -1,0 +1,20 @@
+%h2 Downloads
+%p.permalink
+  Permalink:
+  %strong.larger
+    %a{ :href => url(:order, :show, @order[:id]) }= @order[:id]
+
+- if Sellbot::Config.max_downloads
+  %p
+    You can download each individual file below
+    up to #{Sellbot::Config.max_downloads} times.
+    Please contact
+    <a href="mailto:#{Sellbot::Config.support}">#{Sellbot::Config.support}</a>
+    if that poses a problem for you.
+%p
+  If you find yourself sending this url to someone
+  else, your friend should probably visit
+  <a href="#{url(:store, :start, id:@order[:item][:id])}">this page</a>
+  instead :)
+
+= partial 'order/products_table'

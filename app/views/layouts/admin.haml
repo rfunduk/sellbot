@@ -1,0 +1,25 @@
+!!! 5
+%html
+  %head
+    %title= "#{Sellbot::Config.title} Admin"
+    %link{ href:'/css/sellbot.css', media:'screen', rel:'stylesheet', type:'text/css' }
+    %link{ href:'/css/admin.css', media:'screen', rel:'stylesheet', type:'text/css' }
+  %body
+    .content.clearfix.span12
+      - if Sellbot::Config.logo
+        .logo.span8
+          %a{ href:Sellbot::Config.home }
+            %img{ src:Sellbot::Config.logo }
+          %h2
+            %a{ href:url_for(:admin, :root) }
+              - unless @index
+                &laquo;
+              Admin
+      = yield
+      .ref.span8
+        Powered by
+        %a{ href:'https://github.com/rfunduk/sellbot' } sellbot
+
+    %script{ type:'text/javascript', src:'/js/applib.js' }
+    %script{ type:'text/javascript', src:'/js/adminlib.js' }
+    = yield_content :scripts

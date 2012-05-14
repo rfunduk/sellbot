@@ -1,0 +1,6 @@
+# because that's annoying
+.DS_Store
+
+# don't commit environment configuration
+# (sensitive information)
+config/env

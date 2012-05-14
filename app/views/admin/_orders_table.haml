@@ -1,0 +1,28 @@
+- if @orders.empty?
+  %p
+    No order(s) found!
+- else
+  - if @orders.length > 1
+    .controls
+      %label Fitler:
+      %input#filter
+
+  %table.table.orders
+    - @orders.sort_by { |o| -o[:timestamp] }.each do |order|
+      - item = order[:item]
+      %tr
+        %td.verified{ class:(!!order[:verified]).to_s }
+          = order[:verified] ? '&check;' : '&times;'
+        %td.time= Time.at(order[:timestamp]).strftime("%Y-%m-%d @ %H:%M")
+        %td.order_id= order[:id]
+        %td.email{ class:(order[:email] == 'skipped' ? 'skipped' : '') }= order[:email]
+        %td.purchased_item{ class:item[:kind] }= item[:name]
+        %td.info
+          %a{ data: { toggle:'modal' }, href:"#info_modal_#{order[:id]}" } &hellip;
+          .modal{ id:"info_modal_#{order[:id]}" }
+            .modal-header
+              %a.close{ data: { dismiss:'modal' } } &times;
+              %h3 Order Info
+            .modal-body
+              - # TODO, don't just jsonify order in modal :)
+              %pre= JSON.pretty_generate(order)

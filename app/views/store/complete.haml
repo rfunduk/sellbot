@@ -1,0 +1,29 @@
+.step.step1.active
+  %h2 Just a moment...
+
+  %p
+    Your purchase appears to have been completed successfully!
+    Please wait for just a brief moment while we do some
+    hoop-jumping to verify the transaction.
+
+#response
+  .spinner
+
+- content_for :scripts do
+  :javascript
+    $(document).ready( function() {
+      var spinner = $('.spinner').show();
+      $.ajax( {
+        url: '#{url_for(:store, :check, uuid:params[:uuid])}',
+        dataType: 'html',
+        data: { tx: '#{params[:tx]}' },
+        type: 'post',
+        success: function( r ) {
+          spinner.hide();
+          $('#response').html( r );
+          $('.step')
+            .removeClass('active')
+            .filter('.step2').addClass('active');
+        }
+      } );
+    } );

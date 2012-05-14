@@ -1,0 +1,84 @@
+.box.span8
+  %h3
+    Find Orders
+    %small (total: #{@count})
+
+  %ul#switcher
+    %li.active{ rel:'bydate' } By Date
+    %li{ rel:'byid' } By ID
+
+  %section#bydate.active
+    .controls
+      %p#range
+
+    %input#load_orders.btn{ type:'submit', value:'Load Orders' }
+
+  %section#byid
+    .controls
+      %label ID:
+      %input#find
+
+    %input#find_order.btn{ type:'submit', value:'Find Order' }
+
+#results.span12.box
+
+- content_for :scripts do
+  :javascript
+    $(document).ready( function() {
+      var today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      var dateRange = $('#range').DatePicker( {
+        flat: true,
+        date: [today,today],
+        current: today,
+        calendars: 3,
+        mode: 'range',
+        starts: 0
+      } );
+
+      var container = $('#results');
+
+      function wireFilters() {
+        $('.controls input#filter').livefilter( { selector: '#results tr' } );
+      }
+
+      $('ul#switcher li').click( function() {
+        $(this).siblings().removeClass('active').end().addClass('active');
+        $('section').removeClass('active');
+        $('section#'+$(this).attr('rel')).addClass('active');
+      } );
+
+      $('#load_orders').click( function() {
+        var dates = dateRange.DatePickerGetDate();
+        $.ajax( {
+          url: '/admin/order_details',
+          type: 'get',
+          dataType: 'html',
+          data: {
+            start: dates[0].getTime() / 1000,
+            end: dates[1].getTime() / 1000
+          },
+          success: function( r ) {
+            container.html( r ).show();
+            wireFilters();
+          }
+        } );
+        return false;
+      } );
+
+      $('#find_order').click( function() {
+        var orderId = $('#find').val();
+        $.ajax( {
+          url: '/admin/order_details',
+          type: 'get',
+          dataType: 'html',
+          data: { id: orderId },
+          success: function( r ) {
+            container.html( r );
+          }
+        } );
+        return false;
+      } );
+    } );

@@ -1,0 +1,80 @@
+.step.step1.active
+  %h2 Coming right up!
+  %p
+    This short process will guide you to purchase and download:
+
+  .product.clearfix
+    .item
+      - if @item[:kind] == :package
+        %a.toggle_contents{ :href => 'http://google.com' } show contents
+      %em= @item[:name]
+      (<strong>#{number_to_currency(@item[:price], unit: Sellbot::Config.price[:unit]||'$', precision: Sellbot::Config.price[:precision]||0)}</strong>)
+    - if @item[:kind] == :package
+      %ul.contents{ :style => 'display: none;' }
+        - @item[:contents].each do |product|
+          %li= product[:name]
+
+  - if Sellbot::Config.email_optional
+    %p
+      It would be a great idea to
+      supply a working email address. This way we can email
+      you with a receipt and download links. One
+      thing is for sure &mdash; <strong>No spam!</strong>
+      If you'd prefer not to give your email,
+      just make sure to keep your <em>Order ID</em>
+      somewhere safe.
+  %p
+    If you encounter any difficulties at all, you
+    can receive a helping hand by emailing
+    <a href="mailto:#{Sellbot::Config.support}">#{Sellbot::Config.support}</a>.
+
+.spinner
+.form= partial 'store/signup'
+
+- content_for :scripts do
+  :javascript
+    $(document).ready( function() {
+      var packageContentsShown = false;
+      $('a.toggle_contents').click( function() {
+        var toggler = $(this);
+        $('ul.contents').toggle( packageContentsShown = !packageContentsShown );
+        toggler.text( (packageContentsShown ? 'hide' : 'show') + ' contents' );
+        return false;
+      } );
+
+      var container = $('.form');
+      var spinner = $('.spinner');
+      $('body')
+        .on( 'click', 'a#skip', function() {
+          $('#email').val('skipped');
+          $('#email_form').submit();
+          return false;
+        } )
+        .on( 'submit', 'form#email_form', function() {
+          var form = $(this);
+          var opts = {
+            url: form.attr('action'),
+            type: form.attr('method'),
+            dataType: 'html',
+            data: form.serialize(),
+            success: function( r ) {
+              $(document).on( 'paymentWidgetLoaded', function() {
+                $(document).off( 'paymentWidgetLoaded' );
+                container.show();
+                $('.step')
+                  .removeClass('active')
+                  .filter('.step2').addClass('active');
+                spinner.hide();
+              } );
+              container.html( r );
+            },
+            error: function() {
+              console.log('it failed');
+            }
+          };
+          spinner.show();
+          container.hide();
+          $.ajax( opts );
+          return false;
+        } );
+    } );

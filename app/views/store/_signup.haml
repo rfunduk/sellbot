@@ -1,0 +1,16 @@
+- if @error
+  .step.step2
+    %h2 Oops!
+    %p
+      Please enter your email address! Please be assured
+      that there will be <strong>no spam</strong> or
+      other slimey usage of your email.
+  :javascript
+    $(document).trigger( 'paymentWidgetLoaded' );
+
+%form#email_form{ :action => url_for( :store, :order ), :method => :post }
+  %input{ :type => :hidden, :name => :item, :value => @item_id || @item[:id] }
+  %input#email{ :type => :text, :name => :email, :placeholder => 'your@email.com' }
+  %input.btn.btn-primary{ :type => :submit, :value => "Submit" }
+  - if Sellbot::Config.email_optional
+    %a#skip{ :href => 'javascript:void(0);' } ...or skip it &raquo;

@@ -1,0 +1,25 @@
+%h2 Oops!
+
+%p
+  The maximum number of downloads per file is
+  #{Sellbot::Config.max_downloads}. Exceeding
+  this number can result in a ton of extra bandwidth
+  charges, and that can make us sad pandas :(
+
+%p
+  That said, we aren't about to let you starve
+  over here. So please send us an email at
+  <a href="mailto:#{Sellbot::Config.support}">#{Sellbot::Config.support}</a>
+  and we'll surely work it out with you.
+
+%p
+  Cheers!
+
+%p
+  %em P.S.
+  Please tell us this Order ID when you contact us:
+  %br
+  %strong.larger= params[:uuid]
+
+%p
+  %a.bare{ :href => url(:order, :show, uuid:params[:uuid]) } &laquo; back

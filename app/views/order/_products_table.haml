@@ -1,0 +1,13 @@
+%table.download.table
+  - @items.each do |item|
+    - file_count = item[:files].keys.length
+    %tr
+      %td.name
+        %h4= item[:name]
+        - if item[:subtitle]
+          %p= item[:subtitle]
+      %td.download{ :class => file_count > 1 ? 'many' : 'single' }
+        - item[:files].entries.each do |key, filename|
+          %a.btn{ :class => @order[:downloads]["#{item[:id]}/#{key}".to_sym],
+                  :href => url_for(:order, :download, uuid:@order[:id], item_id:item[:id], file_key:key) }
+            = Sellbot::Config.file_key_map[key.to_sym] || key.to_s
