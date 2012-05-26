@@ -5,11 +5,7 @@ module Sellbot
         @config = config
       end
 
-      def form_values( order, return_url )
-        {}
-      end
-
-      def confirm_order( order, params )
+      def confirm_order( *args )
         { response: nil, errors: [], ok: true }
       end
 

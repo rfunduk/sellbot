@@ -4,6 +4,43 @@ Sellbot::Web.controller :order do
     @storage = Sellbot::Storage.new
   end
 
+  post :check, map:'/check/:uuid' do
+    @order = @db.fetch( params[:uuid] )
+    if params[:tx].blank?
+      # if we don't have a transaction id we have
+      # to wait for the ipn
+      @try_again = params[:attempts_left].to_i > 0
+      sleep 3
+    else
+      confirm_order(params[:tx]) unless @order[:verified]
+    end
+
+    #logger.debug "UPDATED ORDER: #{@order.inspect}"
+    if @order[:verified]
+      @items = Sellbot::Store.find_items( @order[:item][:id] )
+      partial 'store/success'
+    else
+      partial 'store/fail'
+    end
+  end
+
+  post :complete, map:'/ipn/:uuid' do
+    @order = @db.fetch( params[:uuid] )
+    confirm_order( params[:txn_id] ) unless @order[:verified]
+    halt 200, ''
+  end
+
+  get :complete, map:'/complete/:uuid' do
+    @order = @db.fetch( params[:uuid] )
+    if @order[:verified]
+      redirect url(:order, :show, uuid:@order[:id])
+    else
+      payment = Sellbot::Payment.new
+      @completed = payment.is_complete?( params )
+      render 'store/complete'
+    end
+  end
+
   get :denied, map:'/denied/:uuid' do
     render 'order/denied'
   end

@@ -5,7 +5,8 @@ Sellbot::Web.controller :admin do
     logger.info "PARAMS: #{params.inspect}"
 
     # ensure we're logged in as an admin
-    if !Sellbot::Config.admin.keys.include?( session[:admin_user].to_sym )
+    admin_user = session[:admin_user].to_sym rescue nil
+    if !Sellbot::Config.admin.keys.include?( admin_user )
       redirect url(:admin, :login_form)
       return
     end

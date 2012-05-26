@@ -3,42 +3,7 @@ Sellbot::Web.controller :store do
     logger.info "PARAMS: #{params.inspect}"
     @db = Sellbot::DB.new
     #@mailer = Sellbot::Mail.new
-    @payment = Sellbot::Payment.new
     Sellbot::Store.ensure_newest!(@db)
-  end
-
-  post :check, map:'/check/:uuid' do
-    @order = @db.fetch( params[:uuid] )
-    unless @order[:verified]
-      status = @payment.confirm_order( @order, params )
-      begin
-        @db.update(
-          @order, {
-            verified: status[:ok],
-            ext: status
-          }
-        )
-      rescue
-        logger.debug "Order update ERROR: #{$!.inspect}"
-      end
-    end
-    logger.debug "UPDATED ORDER: #{@order.inspect}"
-    if @order[:verified]
-      @items = Sellbot::Store.find_items( @order[:item][:id] )
-      partial 'store/success'
-    else
-      partial 'store/fail'
-    end
-  end
-
-  get :complete, map:'/complete/:uuid' do
-    @order = @db.fetch( params[:uuid] )
-    if @order[:verified]
-      redirect url(:order, :show, uuid:@order[:id])
-    else
-      @completed = @payment.is_complete?( params )
-      render 'store/complete'
-    end
   end
 
   post :order, map:'/order' do
@@ -61,11 +26,18 @@ Sellbot::Web.controller :store do
         )
 
         @complete_url = Sellbot::Config.host + url_for(
-          :store,
+          :order,
           :complete,
           :uuid => @order[:id]
         )
 
+        @notify_url = Sellbot::Config.host + url_for(
+          :order,
+          :complete,
+          :uuid => @order[:id]
+        )
+
+        @payment = Sellbot::Payment.new
         processor = Sellbot::Config.payment[:processor].downcase
         partial "store/payment_processors/#{processor}"
       else
@@ -75,9 +47,10 @@ Sellbot::Web.controller :store do
   end
 
   get :start, map:'/:id' do
-    if @item = Sellbot::Store.find_purchaseable( params[:id] )
+    begin
+      @item = Sellbot::Store.find_purchaseable( params[:id] )
       render 'store/purchase'
-    else
+    rescue Sellbot::Store::NotFound
       halt 404, "Not found"
     end
   end

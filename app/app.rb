@@ -15,6 +15,23 @@ class Sellbot::Web < Padrino::Application
   configure :development do; end
   configure :production do; end
 
+  helpers do
+    def confirm_order( transaction_id )
+      payment = Sellbot::Payment.new
+      status = payment.confirm_order( @order, transaction_id )
+      begin
+        @db.update(
+          @order, {
+            verified: status[:ok],
+            ext: status
+          }
+        )
+      rescue
+        logger.debug "Order update ERROR: #{$!.inspect}"
+      end
+    end
+  end
+
   error 404 do
     render 'errors/404'
   end

@@ -23,9 +23,9 @@ gem 'aws-sdk', '1.3.5'
 
 # bundle a payment adapter
 #gem 'nestful' # required for paypal
-gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+#gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # bundle a db adapter
-gem 'redis-namespace'
+#gem 'redis-namespace'
 #gem 'sequel'
 #gem 'mongo'

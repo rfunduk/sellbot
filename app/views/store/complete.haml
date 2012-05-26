@@ -11,12 +11,14 @@
 
 - content_for :scripts do
   :javascript
-    $(document).ready( function() {
+    var attemptsLeft = 5;
+
+    function checkOrder() {
       var spinner = $('.spinner').show();
       $.ajax( {
-        url: '#{url_for(:store, :check, uuid:params[:uuid])}',
+        url: '#{url_for(:order, :check, uuid:params[:uuid])}',
         dataType: 'html',
-        data: { tx: '#{params[:tx]}' },
+        data: { tx: '#{params[:tx]}', attempts_left: --attemptsLeft },
         type: 'post',
         success: function( r ) {
           spinner.hide();
@@ -26,4 +28,6 @@
             .filter('.step2').addClass('active');
         }
       } );
-    } );
+    }
+
+    $(document).ready( checkOrder );

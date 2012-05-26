@@ -1,23 +1,30 @@
 module Sellbot
   module Processor
-    class Paypal
+    class PayPal
       include Padrino::Helpers::NumberHelpers
 
       def initialize( config )
         @config = config
         @config.cert_id ||= ENV['PAYPAL_CERT_ID']
         @config.business_id ||= ENV['PAYPAL_BUSINESS_ID']
+        @config.currency_code ||= ENV['PAYPAL_CURRENCY_CODE']
         @config.identity_token ||= ENV['PAYPAL_IDENTITY_TOKEN']
       end
 
-      def form_values( order, return_url )
+      def self.base_path
+        Sellbot::Config.env == :development ?
+          "https://www.sandbox.paypal.com" :
+          "https://www.paypal.com"
+      end
+
+      def form_values( order, return_url, notify_url )
         values = {
           :cmd => "_cart",
           :business => @config.business_id,
-          :currency_code => "CAD",
+          :currency_code => @config.currency_code,
           :upload => 1,
           :return => return_url,
-          :notify_url => '',
+          :notify_url => notify_url,
           :invoice => SecureRandom.uuid,
           :tax_cart => number_with_precision( 0, precision: 2 ),
           :cert_id => @config.cert_id
@@ -39,10 +46,9 @@ module Sellbot
         params[:st] == 'Completed'
       end
 
-      def confirm_order( order, params )
-        transaction_id = params[:tx]
+      def confirm_order( order, transaction_id )
         check = ::Nestful.post(
-          "https://www.sandbox.paypal.com/cgi-bin/webscr",
+          "#{self.class.base_path}/cgi-bin/webscr",
           format: :form,
           params: {
             cmd: '_notify-synch',

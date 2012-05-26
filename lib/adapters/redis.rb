@@ -2,11 +2,12 @@ module Sellbot
   module Adapter
     class Redis
       def initialize( config={} )
-        uri = URI.parse( ENV['REDIS_URI'] || config.uri )
+        uri = URI.parse( ENV['REDIS_URI'] || config.uri || 'http://127.0.0.1:6379' )
         redis = ::Redis.connect(
           url: uri.host,
           port: uri.port,
-          thread_safe: true
+          thread_safe: true,
+          db: 1
         )
         Config.log "Redis using namespace #{config.namespace}"
         @redis = ::Redis::Namespace.new( config.namespace || 'sellbot',

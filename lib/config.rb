@@ -14,7 +14,7 @@ module Sellbot
     }
 
     class << self
-      attr_reader :path, :env
+      attr_reader :path
 
       def setup!( opts={} )
         @path = opts[:path]
@@ -28,6 +28,10 @@ module Sellbot
         config = YAML::load_file( config_file )[@env]
         config = DEFAULTS.merge(config.recursively_symbolize_keys)
         config[:env] = @env.to_sym
+        config[:admin] ||= {}
+        if ENV['ADMIN_LOGIN']
+          config[:admin][ENV['ADMIN_LOGIN'].to_sym] = ENV['ADMIN_PASSWORD']
+        end
         @@config = ::OpenStruct.new config
       end
 

@@ -8,17 +8,13 @@ module Sellbot
         ::Stripe.api_key = @config.secret
       end
 
-      def form_values( order, return_url )
-        {}
-      end
-
-      def confirm_order( order, params )
+      def confirm_order( order, transaction_id )
         result = { response: nil, errors: [] }
         begin
           charge = ::Stripe::Charge.create(
             :amount => order[:item][:price] * 100,
             :currency => 'usd',
-            :card => params[:tx],
+            :card => transaction_id,
             :description => order[:id]
           )
           result[:response] = charge
